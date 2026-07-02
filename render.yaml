@@ -1,17 +1,11 @@
 # =============================================================================
-# Render Blueprint — deploys the Orbit API + a FREE Postgres database.
-# The website is deployed separately on Vercel (free). See DEPLOY-FREE.md.
+# Render Blueprint — deploys the Orbit API (free web service).
+# Database: use a FREE Neon Postgres (neon.tech) — permanent, no card, reliable.
+# Create a Neon project, copy its connection string, and paste it as the
+# DATABASE_URL env var on this service (Render dashboard). See DEPLOY-FREE.md.
 #
-# Use it: Render dashboard → New + → Blueprint → pick your GitHub repo.
-# Render reads this file, creates the database, generates the secrets, and
-# builds the API from docker/api.Dockerfile. You only fill in 3 URLs afterward.
+# The website is deployed separately on Vercel (free).
 # =============================================================================
-
-databases:
-  - name: orbit-db
-    plan: free # free Postgres (expires after 90 days — recreate or upgrade later)
-    databaseName: orbit
-    user: orbit
 
 services:
   - type: web
@@ -26,11 +20,10 @@ services:
         value: production
       - key: API_PORT
         value: "4000"
-      # Auto-wired from the database above — do not edit.
+      # Paste your Neon connection string here in the Render dashboard.
+      # Use the DIRECT (non-pooled) string and make sure it ends with ?sslmode=require
       - key: DATABASE_URL
-        fromDatabase:
-          name: orbit-db
-          property: connectionString
+        sync: false
       # Single instance → in-memory rate limiting (no Redis needed).
       - key: REDIS_ENABLED
         value: "false"
@@ -60,6 +53,5 @@ services:
       - key: S3_BUCKET
         value: ""
       # Email: blank = emails are written to the server logs instead of sent.
-      # Set SMTP_HOST/PORT/USER/PASSWORD to deliver real verification emails.
       - key: SMTP_HOST
         value: ""
