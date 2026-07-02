@@ -1,0 +1,154 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light theme */
+    --background: 210 20% 96%;
+    --foreground: 222 20% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 20% 12%;
+    --primary: 217 91% 53%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 16% 92%;
+    --secondary-foreground: 222 20% 12%;
+    --muted: 210 16% 92%;
+    --muted-foreground: 215 14% 42%;
+    --accent: 210 16% 88%;
+    --accent-foreground: 222 20% 12%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214 15% 86%;
+    --input: 214 15% 86%;
+    --ring: 217 91% 53%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    /* Modern dark theme — deep slate with a vivid blue accent */
+    --background: 225 24% 6%;
+    --foreground: 210 20% 96%;
+    --card: 224 18% 11%;
+    --card-foreground: 210 20% 96%;
+    --primary: 213 94% 62%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 223 16% 17%;
+    --secondary-foreground: 210 20% 96%;
+    --muted: 223 16% 16%;
+    --muted-foreground: 218 13% 65%;
+    --accent: 223 16% 22%;
+    --accent-foreground: 210 20% 96%;
+    --destructive: 0 72% 56%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 223 14% 20%;
+    --input: 223 14% 20%;
+    --ring: 213 94% 62%;
+    --radius: 0.75rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    min-height: 100vh;
+  }
+
+  /* Ambient gradient glow behind everything (most visible in dark). */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(60rem 40rem at 15% -10%, hsl(var(--primary) / 0.10), transparent 60%),
+      radial-gradient(50rem 40rem at 100% 0%, hsl(265 90% 60% / 0.08), transparent 55%);
+  }
+
+  /* Smooth interactions globally */
+  a,
+  button {
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease,
+      box-shadow 0.2s ease,
+      transform 0.12s ease,
+      opacity 0.15s ease;
+  }
+
+  /* Custom scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
+    background-clip: padding-box;
+  }
+}
+
+@layer components {
+  /* Frosted-glass surface for the top nav */
+  .glass {
+    background: hsl(var(--card) / 0.72);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+  }
+
+  /* Card that lifts on hover */
+  .card-hover {
+    transition:
+      transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.2s ease,
+      border-color 0.2s ease;
+  }
+  .card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px -12px hsl(0 0% 0% / 0.45);
+    border-color: hsl(var(--primary) / 0.35);
+  }
+
+  /* Shimmer skeleton */
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+    background: hsl(var(--muted));
+    border-radius: var(--radius);
+  }
+  .skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, hsl(var(--foreground) / 0.07), transparent);
+    animation: shimmer 1.4s infinite;
+  }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
