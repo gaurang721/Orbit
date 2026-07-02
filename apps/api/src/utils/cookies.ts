@@ -15,7 +15,10 @@ function baseCookieOptions(): CookieOptions {
   return {
     httpOnly: true,
     secure,
-    sameSite: env.isProd ? 'strict' : 'lax',
+    // In production the web app and API can live on different domains (e.g.
+    // Vercel + Render), so the refresh cookie must be SameSite=None to be sent
+    // cross-site. It requires Secure=true (enforced in prod). Locally we stay Lax.
+    sameSite: env.isProd ? 'none' : 'lax',
     domain,
     path: REFRESH_COOKIE_PATH,
   };
